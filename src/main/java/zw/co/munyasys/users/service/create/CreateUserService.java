@@ -46,6 +46,7 @@ public class CreateUserService {
         String password = passwordGenerator.generate();
 
         user.setPassword(passwordEncoder.encode(password));
+        user.setEnabled(true);
 
         User persistedUser = userRepository.save(user);
 

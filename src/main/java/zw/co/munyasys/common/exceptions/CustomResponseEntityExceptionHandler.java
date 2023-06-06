@@ -30,11 +30,18 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RecordNotFoundException.class)
-    public final ResponseEntity<ErrorMessage> handleRecordNotFoundException(RecordNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public final ResponseEntity<ErrorMessage> handleRecordNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         ErrorMessage errorDetails = new ErrorMessage(new Date(), ex.getMessage(), request.getDescription(false), ex.getClass().getName());
         ex.printStackTrace();
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public final ResponseEntity<ErrorMessage> handleDuplicateResourceException(DuplicateResourceException ex, WebRequest request) {
+        ErrorMessage errorDetails = new ErrorMessage(new Date(), ex.getMessage(), request.getDescription(false), ex.getClass().getName());
+        ex.printStackTrace();
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(NoSuchElementException.class)

@@ -2,17 +2,27 @@ package zw.co.munyasys.users.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import zw.co.munyasys.common.jpa.BaseEntity;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
+@Builder
 @Table(name = "Users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity implements UserDetails {
 
     @Column(unique = true, nullable = false)
@@ -43,7 +53,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING, timezone = "Africa/Harare", locale = "en_ZW")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Override
     public boolean equals(Object o) {

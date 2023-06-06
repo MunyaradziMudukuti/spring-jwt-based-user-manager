@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import zw.co.munyasys.users.model.Gender;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public record UpdateUserCommand(
 
@@ -24,7 +24,7 @@ public record UpdateUserCommand(
         @Email(message = "A valid email should be provided")
         String email,
         @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING, locale = "en_ZW", timezone = "Africa/Harare")
-        Date dateOfBirth,
+        LocalDate dateOfBirth,
         String phoneNumber
 ) {
 

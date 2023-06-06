@@ -25,11 +25,12 @@ public class Todo extends BaseEntity {
 
     private boolean isCompleted;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "todo_category_id")
     private TodoCategory todoCategory;
 
-    @ManyToOne
-    @Column(updatable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

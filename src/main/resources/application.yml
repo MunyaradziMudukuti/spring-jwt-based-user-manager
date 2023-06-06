@@ -27,7 +27,7 @@ spring:
 server:
   port: 9100
 jwt:
-  secret: "(%$Zz&W-)#$Pju9&^%3&_b*@Rf%y!"
+  secret: "82F413F4428472B4B6250645367566B5970404E635266556A586E32723575387"
 system:
   name: MDK TODO APP
 
