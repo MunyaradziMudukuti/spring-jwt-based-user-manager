@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: todo application
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    username: user
+    password: "password"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:9786/todo_db?autoReconnect=true&createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Africa/Harare&rewriteBatchedStatements=true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  mail:
+    host: smtp.mail.yahoo.com
+    port: 587
+    password: svzvbedvunljayph
+    username: munyaradzimudukuti@yahoo.com
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+server:
+  port: 9100
+jwt:
+  secret: "(%$Zz&W-)#$Pju9&^%3&_b*@Rf%y!"
+system:
+  name: MDK TODO APP
+
+email:
+  origin:
+    sender: munyaradzimudukuti@yahoo.com
+
+file-storage:
+  base-path: ./
+
+
+access:
+  token:
+    expirationTimeInSec: 60
+
+
+refresh:
+  token:
+    expirationTimeInSec: 60

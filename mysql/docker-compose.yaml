@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+
+  bandwidthdb:
+    image: mysql:8
+    container_name: tododb
+    hostname: tododb
+    ports:
+      - 9786:3306
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_PASSWORD=password
+      - MYSQL_USER=user
+      - MYSQL_DATABASE=todo_db
+    volumes:
+      - ./data:/var/lib/mysql/
+
+
+
+
+
