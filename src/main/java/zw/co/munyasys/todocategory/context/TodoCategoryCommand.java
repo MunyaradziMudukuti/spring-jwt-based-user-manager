@@ -2,7 +2,7 @@ package zw.co.munyasys.todocategory.context;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CreateTodoCategoryCommand(
+public record TodoCategoryCommand(
 
         @NotBlank(message = "Category name should be provided")
         String name,

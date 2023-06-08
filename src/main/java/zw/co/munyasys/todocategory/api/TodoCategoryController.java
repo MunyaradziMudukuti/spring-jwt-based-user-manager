@@ -6,12 +6,13 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import zw.co.munyasys.todocategory.context.CreateTodoCategoryCommand;
+import zw.co.munyasys.todocategory.context.TodoCategoryCommand;
 import zw.co.munyasys.todocategory.context.TodoCategoryDto;
 import zw.co.munyasys.todocategory.context.TodoCategoryService;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Api(tags = "Todo Category Management")
@@ -25,14 +26,22 @@ public class TodoCategoryController {
     }
 
     @PostMapping
-    @ApiOperation("Create A Todo Category")
-    public ResponseEntity<TodoCategoryDto> addCategory(Principal currentUser, @RequestBody @Valid CreateTodoCategoryCommand createTodoCategoryCommand) {
+    @ApiOperation("Create a Todo Category")
+    public ResponseEntity<TodoCategoryDto> addCategory(Principal currentUser, @RequestBody @Valid TodoCategoryCommand createTodoCategoryCommand) {
         TodoCategoryDto todoCategoryDto = todoCategoryService.create(currentUser, createTodoCategoryCommand);
         return new ResponseEntity<>(todoCategoryDto, HttpStatus.OK);
     }
 
+    @PutMapping("{todoCategoryId}")
+    @ApiOperation("Update a Todo Category")
+    public ResponseEntity<TodoCategoryDto> updateCategory(@PathVariable UUID todoCategoryId, Principal currentUser, @RequestBody @Valid TodoCategoryCommand updateTodoCategoryCommand) {
+        TodoCategoryDto todoCategoryDto = todoCategoryService.update(todoCategoryId, currentUser, updateTodoCategoryCommand);
+        return new ResponseEntity<>(todoCategoryDto, HttpStatus.OK);
+    }
+
+
     @GetMapping
-    @ApiOperation("Get My Todo Categories")
+    @ApiOperation("Get my Todo Categories")
     public ResponseEntity<List<TodoCategoryDto>> getMyCategories(Principal currentUser) {
         List<TodoCategoryDto> categories = todoCategoryService.getCategories(currentUser);
         return new ResponseEntity<>(categories, HttpStatus.OK);

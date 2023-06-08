@@ -10,7 +10,7 @@ public interface TodoCategoryMapper {
 
     TodoCategoryMapper INSTANCE = Mappers.getMapper(TodoCategoryMapper.class);
 
-    TodoCategory toEntity(CreateTodoCategoryCommand createTodoCategoryCommand);
+    TodoCategory toEntity(TodoCategoryCommand createTodoCategoryCommand);
 
     TodoCategoryDto toDto(TodoCategory todoCategory);
 

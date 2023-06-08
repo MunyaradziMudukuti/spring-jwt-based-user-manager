@@ -5,12 +5,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import zw.co.munyasys.common.exceptions.DuplicateResourceException;
+import zw.co.munyasys.common.exceptions.ResourceNotFoundException;
+import zw.co.munyasys.users.model.Gender;
 import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.read.UserReaderService;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -30,10 +34,12 @@ class TodoCategoryServiceImplTest {
     @Captor
     ArgumentCaptor<TodoCategory> todoCategoryArgumentCaptor;
 
+    private final UUID todoCategoryId = UUID.randomUUID();
+
     @Test
     void testCreateThrowsDuplicateResourceExceptionWhenCategoryAlreadyExists() {
         Principal principal = getPrincipal();
-        CreateTodoCategoryCommand createTodoCategoryCommand = getCreateCommand();
+        TodoCategoryCommand createTodoCategoryCommand = getCommand();
 
         when(userReaderService.getLoggedInUser()).thenReturn(getUser());
         when(todoCategoryRepository.existsByUser_UsernameAndName(any(), any())).thenReturn(true);
@@ -47,7 +53,7 @@ class TodoCategoryServiceImplTest {
     void testCreateCategory() {
         Principal principal = getPrincipal();
         User user = getUser();
-        CreateTodoCategoryCommand createTodoCategoryCommand = getCreateCommand();
+        TodoCategoryCommand createTodoCategoryCommand = getCommand();
 
         when(userReaderService.getLoggedInUser()).thenReturn(user);
         when(todoCategoryRepository.existsByUser_UsernameAndName(any(), any())).thenReturn(false);
@@ -82,12 +88,61 @@ class TodoCategoryServiceImplTest {
 
     }
 
+    @Test
+    void testUpdateThrowsDuplicateResourceExceptionWhenCategoryAlreadyExists() {
+        Principal principal = getPrincipal();
+        TodoCategory todoCategory = getCategory();
+        TodoCategoryCommand updateTodoCategoryCommand = getCommand();
+
+        when(todoCategoryRepository.findById(any())).thenReturn(Optional.of(todoCategory));
+        when(todoCategoryRepository.existsByIdIsNotAndUser_UsernameAndName(any(), any(), any())).thenReturn(true);
+
+        assertThatThrownBy(() -> todoCategoryService.update(todoCategoryId, principal, updateTodoCategoryCommand))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessageContaining(String.format("Todo Category %s already exists", updateTodoCategoryCommand.name()));
+    }
+
+    @Test
+    void testUpdateThrowsResourceNotFoundExceptionWhenCategoryAlreadyExists() {
+        Principal principal = getPrincipal();
+        TodoCategoryCommand updateTodoCategoryCommand = getCommand();
+
+        when(todoCategoryRepository.findById(any())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> todoCategoryService.update(todoCategoryId, principal, updateTodoCategoryCommand))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(String.format("Todo Category with id %s not found", todoCategoryId));
+    }
+
+    @Test
+    void testUpdateCategory() {
+        Principal principal = getPrincipal();
+        TodoCategory todoCategory = getCategory();
+        TodoCategoryCommand updateTodoCategoryCommand = getCommand();
+
+        when(todoCategoryRepository.findById(any())).thenReturn(Optional.of(todoCategory));
+        when(todoCategoryRepository.existsByIdIsNotAndUser_UsernameAndName(any(), any(), any())).thenReturn(false);
+
+        todoCategoryService.update(todoCategoryId, principal, updateTodoCategoryCommand);
+
+        verify(todoCategoryRepository).save(todoCategoryArgumentCaptor.capture());
+
+        TodoCategory actualCategory = todoCategoryArgumentCaptor.getValue();
+
+        assertThat(actualCategory.getName()).isEqualTo(updateTodoCategoryCommand.name());
+        assertThat(actualCategory.getDescription()).isEqualTo(updateTodoCategoryCommand.description());
+        assertThat(actualCategory.getUser()).isNotNull();
+
+    }
+
     private TodoCategory getCategory() {
-        return TodoCategory.builder()
+        TodoCategory todoCategory = TodoCategory.builder()
                 .user(getUser())
                 .name("WORK")
                 .description("Work Related")
                 .build();
+        todoCategory.setId(todoCategoryId);
+        return todoCategory;
     }
 
 
@@ -100,6 +155,7 @@ class TodoCategoryServiceImplTest {
                 .lastName("Mudukuti")
                 .mobileNumber("0772994739")
                 .username("test@mail.com")
+                .gender(Gender.MALE)
                 .build();
     }
 
@@ -107,8 +163,8 @@ class TodoCategoryServiceImplTest {
         return () -> "username";
     }
 
-    private CreateTodoCategoryCommand getCreateCommand() {
-        return new CreateTodoCategoryCommand(
+    private TodoCategoryCommand getCommand() {
+        return new TodoCategoryCommand(
                 "WORK",
                 "Work related Todos"
         );
