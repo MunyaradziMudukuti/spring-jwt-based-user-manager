@@ -57,11 +57,7 @@ public class TodoCategoryServiceImpl implements TodoCategoryService {
 
         String username = currentUser.getName();
 
-        TodoCategory todoCategory = todoCategoryRepository.findById(todoCategoryId)
-                .orElseThrow(() -> {
-                    log.error("Update Todo Category failed for user {} -> Todo Category with id {} not found", username, todoCategoryId);
-                    return new ResourceNotFoundException(String.format("Todo Category with id %s not found", todoCategoryId));
-                });
+        TodoCategory todoCategory = findByIdAndUsername(todoCategoryId, username);
 
         boolean existsByName = todoCategoryRepository.existsByIdIsNotAndUser_UsernameAndName(todoCategoryId, username, updateTodoCategoryCommand.name());
 
@@ -74,5 +70,11 @@ public class TodoCategoryServiceImpl implements TodoCategoryService {
         todoCategory.setDescription(updateTodoCategoryCommand.description());
 
         return mapper.toDto(todoCategoryRepository.save(todoCategory));
+    }
+
+    @Override
+    public TodoCategory findByIdAndUsername(UUID id, String username) {
+        return todoCategoryRepository.findByIdAndUser_Username(id, username)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Todo Category with id %s not found for user %s", id, username)));
     }
 }

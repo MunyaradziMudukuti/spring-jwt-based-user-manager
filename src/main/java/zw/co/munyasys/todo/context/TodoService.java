@@ -7,4 +7,6 @@ import java.security.Principal;
 
 public interface TodoService {
     Page<TodoDto> findAll(Principal principal, Pageable pageable, String searchTerm);
+
+    TodoDto create(Principal currentUser, CreateTodoCommand createTodoCommand);
 }

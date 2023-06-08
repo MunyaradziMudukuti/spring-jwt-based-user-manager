@@ -94,7 +94,7 @@ class TodoCategoryServiceImplTest {
         TodoCategory todoCategory = getCategory();
         TodoCategoryCommand updateTodoCategoryCommand = getCommand();
 
-        when(todoCategoryRepository.findById(any())).thenReturn(Optional.of(todoCategory));
+        when(todoCategoryRepository.findByIdAndUser_Username(any(), any())).thenReturn(Optional.of(todoCategory));
         when(todoCategoryRepository.existsByIdIsNotAndUser_UsernameAndName(any(), any(), any())).thenReturn(true);
 
         assertThatThrownBy(() -> todoCategoryService.update(todoCategoryId, principal, updateTodoCategoryCommand))
@@ -103,24 +103,12 @@ class TodoCategoryServiceImplTest {
     }
 
     @Test
-    void testUpdateThrowsResourceNotFoundExceptionWhenCategoryAlreadyExists() {
-        Principal principal = getPrincipal();
-        TodoCategoryCommand updateTodoCategoryCommand = getCommand();
-
-        when(todoCategoryRepository.findById(any())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> todoCategoryService.update(todoCategoryId, principal, updateTodoCategoryCommand))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining(String.format("Todo Category with id %s not found", todoCategoryId));
-    }
-
-    @Test
     void testUpdateCategory() {
         Principal principal = getPrincipal();
         TodoCategory todoCategory = getCategory();
         TodoCategoryCommand updateTodoCategoryCommand = getCommand();
 
-        when(todoCategoryRepository.findById(any())).thenReturn(Optional.of(todoCategory));
+        when(todoCategoryRepository.findByIdAndUser_Username(any(), any())).thenReturn(Optional.of(todoCategory));
         when(todoCategoryRepository.existsByIdIsNotAndUser_UsernameAndName(any(), any(), any())).thenReturn(false);
 
         todoCategoryService.update(todoCategoryId, principal, updateTodoCategoryCommand);
@@ -132,6 +120,28 @@ class TodoCategoryServiceImplTest {
         assertThat(actualCategory.getName()).isEqualTo(updateTodoCategoryCommand.name());
         assertThat(actualCategory.getDescription()).isEqualTo(updateTodoCategoryCommand.description());
         assertThat(actualCategory.getUser()).isNotNull();
+
+    }
+
+    @Test
+    void testFindByIdAndUsername() {
+        String username = "username";
+        TodoCategory todoCategory = getCategory();
+        when(todoCategoryRepository.findByIdAndUser_Username(any(), any())).thenReturn(Optional.of(todoCategory));
+
+        todoCategoryService.findByIdAndUsername(todoCategoryId, username);
+
+        verify(todoCategoryRepository).findByIdAndUser_Username(todoCategoryId, username);
+    }
+
+    @Test
+    void testFindByIdAndUsernameThrowsResourceNotFoundExceptionWhenCategoryIsNotFound() {
+        String username = "username";
+        when(todoCategoryRepository.findByIdAndUser_Username(any(), any())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> todoCategoryService.findByIdAndUsername(todoCategoryId, username))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(String.format("Todo Category with id %s not found for user %s", todoCategoryId, username));
 
     }
 
@@ -169,4 +179,5 @@ class TodoCategoryServiceImplTest {
                 "Work related Todos"
         );
     }
+
 }

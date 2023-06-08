@@ -207,11 +207,12 @@
 						<exclude>config/**</exclude>
 						<exclude>**/config/**</exclude>
 						<exclude>**/exceptionhandling/**</exclude>
-						<exclude>**/sql/**</exclude>
+						<exclude>**/users/**</exclude>
 						<exclude>**/model/**</exclude>
 						<exclude>**/enums/**</exclude>
+						<exclude>**/security/**</exclude>
 						<exclude>**/dto/**</exclude>
-						<exclude>**/dtos/**</exclude>
+						<exclude>**/common/**</exclude>
 						<exclude>**/*TodoApplication*</exclude>
 					</excludes>
 				</configuration>

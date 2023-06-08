@@ -41,7 +41,7 @@ file-storage:
 
 access:
   token:
-    expirationTimeInSec: 60
+    expirationTimeInSec: 600
 
 
 refresh:

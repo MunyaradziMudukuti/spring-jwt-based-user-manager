@@ -10,4 +10,6 @@ public interface TodoCategoryService {
     List<TodoCategoryDto> getCategories(Principal principal);
 
     TodoCategoryDto update(UUID todoCategoryId, Principal currentUser, TodoCategoryCommand updateTodoCategoryCommand);
+
+    TodoCategory findByIdAndUsername(UUID id, String username);
 }
