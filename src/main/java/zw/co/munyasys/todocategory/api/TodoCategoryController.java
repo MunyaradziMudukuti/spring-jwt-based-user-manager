@@ -5,15 +5,13 @@ import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zw.co.munyasys.todocategory.context.CreateTodoCategoryCommand;
 import zw.co.munyasys.todocategory.context.TodoCategoryDto;
 import zw.co.munyasys.todocategory.context.TodoCategoryService;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @Api(tags = "Todo Category Management")
@@ -27,10 +25,17 @@ public class TodoCategoryController {
     }
 
     @PostMapping
-    @ApiOperation("Get My Todo Categories")
-    public ResponseEntity<TodoCategoryDto> getAll(Principal principal, @RequestBody @Valid CreateTodoCategoryCommand createTodoCategoryCommand) {
-        TodoCategoryDto todoCategoryDto = todoCategoryService.create(principal, createTodoCategoryCommand);
+    @ApiOperation("Create A Todo Category")
+    public ResponseEntity<TodoCategoryDto> addCategory(Principal currentUser, @RequestBody @Valid CreateTodoCategoryCommand createTodoCategoryCommand) {
+        TodoCategoryDto todoCategoryDto = todoCategoryService.create(currentUser, createTodoCategoryCommand);
         return new ResponseEntity<>(todoCategoryDto, HttpStatus.OK);
+    }
+
+    @GetMapping
+    @ApiOperation("Get My Todo Categories")
+    public ResponseEntity<List<TodoCategoryDto>> getMyCategories(Principal currentUser) {
+        List<TodoCategoryDto> categories = todoCategoryService.getCategories(currentUser);
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
 }

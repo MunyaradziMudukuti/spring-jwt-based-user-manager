@@ -10,6 +10,7 @@ import zw.co.munyasys.users.service.read.UserReaderService;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -62,6 +63,33 @@ class TodoCategoryServiceImplTest {
         assertThat(actualCategory.getUser()).isEqualTo(user);
 
     }
+
+    @Test
+    void testGetCategories() {
+        Principal principal = getPrincipal();
+        TodoCategory todoCategory = getCategory();
+
+        when(todoCategoryRepository.findByUser_Username(any())).thenReturn(List.of(todoCategory));
+
+        List<TodoCategoryDto> todoCategoryDtos = todoCategoryService.getCategories(principal);
+
+        verify(todoCategoryRepository).findByUser_Username(principal.getName());
+
+        TodoCategoryDto actualCategory = todoCategoryDtos.get(0);
+
+        assertThat(actualCategory.name()).isEqualTo(todoCategory.getName());
+        assertThat(actualCategory.description()).isEqualTo(todoCategory.getDescription());
+
+    }
+
+    private TodoCategory getCategory() {
+        return TodoCategory.builder()
+                .user(getUser())
+                .name("WORK")
+                .description("Work Related")
+                .build();
+    }
+
 
     private User getUser() {
         return User.builder()

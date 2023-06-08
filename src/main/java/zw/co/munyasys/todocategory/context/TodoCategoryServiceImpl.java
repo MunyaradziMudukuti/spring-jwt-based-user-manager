@@ -1,12 +1,15 @@
 package zw.co.munyasys.todocategory.context;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import zw.co.munyasys.common.exceptions.DuplicateResourceException;
 import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.read.UserReaderService;
 
 import java.security.Principal;
+import java.util.List;
 
+@Slf4j
 @Service
 public class TodoCategoryServiceImpl implements TodoCategoryService {
 
@@ -29,6 +32,7 @@ public class TodoCategoryServiceImpl implements TodoCategoryService {
         boolean existsByName = todoCategoryRepository.existsByUser_UsernameAndName(username, createTodoCategoryCommand.name());
 
         if (existsByName) {
+            log.error("Create Todo Category failed for user % -> Todo Category {} already exists {}", username, createTodoCategoryCommand.name());
             throw new DuplicateResourceException(String.format("Todo Category %s already exists", createTodoCategoryCommand.name()));
         }
 
@@ -37,5 +41,12 @@ public class TodoCategoryServiceImpl implements TodoCategoryService {
         todoCategory.setUser(user);
 
         return mapper.toDto(todoCategoryRepository.save(todoCategory));
+    }
+
+    @Override
+    public List<TodoCategoryDto> getCategories(Principal principal) {
+        String username = principal.getName();
+        List<TodoCategory> todoCategories = todoCategoryRepository.findByUser_Username(username);
+        return mapper.toDtos(todoCategories);
     }
 }
