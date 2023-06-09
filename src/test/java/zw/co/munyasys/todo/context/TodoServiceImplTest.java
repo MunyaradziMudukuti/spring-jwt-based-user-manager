@@ -4,9 +4,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import zw.co.munyasys.todocategory.context.TodoCategory;
-import zw.co.munyasys.todocategory.context.TodoCategoryMapper;
+import zw.co.munyasys.common.exceptions.ResourceNotFoundException;
+import zw.co.munyasys.todo.context.dao.TodoRepository;
+import zw.co.munyasys.todo.context.dto.CreateTodoCommand;
+import zw.co.munyasys.todo.context.dto.UpdateTodoCommand;
+import zw.co.munyasys.todo.context.mapper.TodoMapper;
+import zw.co.munyasys.todo.context.model.Todo;
 import zw.co.munyasys.todocategory.context.TodoCategoryService;
+import zw.co.munyasys.todocategory.context.mapper.TodoCategoryMapper;
+import zw.co.munyasys.todocategory.context.model.TodoCategory;
 import zw.co.munyasys.users.model.Gender;
 import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.read.UserReaderService;
@@ -14,14 +20,17 @@ import zw.co.munyasys.users.service.read.UserReaderService;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TodoServiceImplTest {
     private final UUID todoCategoryId = UUID.randomUUID();
+    private final UUID todoId = UUID.randomUUID();
     @Mock
     TodoRepository todoRepository;
     @Mock
@@ -60,12 +69,91 @@ class TodoServiceImplTest {
         assertThat(actualTodo.isCompleted()).isFalse();
     }
 
+    @Test
+    void testUpdate() {
+        Principal principal = getPrincipal();
+        Todo todo = getTodo();
+        UUID todoCategoryId = UUID.randomUUID();
+        TodoCategory todoCategory = getCategory();
+        todoCategory.setId(todoCategoryId);
+        UpdateTodoCommand updateTodoCommand = new UpdateTodoCommand(
+                "Go to gym",
+                "Got to the gym and do push ups",
+                todoCategoryId,
+                LocalDateTime.now(),
+                true
+        );
+
+        when(todoRepository.findByIdAndUser_Username(any(), anyString())).thenReturn(Optional.of(todo));
+        when(todoCategoryService.findByIdAndUsername(any(), anyString())).thenReturn(todoCategory);
+
+        todoService.update(todoId, principal, updateTodoCommand);
+
+        verify(todoRepository).save(todoArgumentCaptor.capture());
+
+        Todo actualTodo = todoArgumentCaptor.getValue();
+
+        assertThat(actualTodo.getTitle()).isEqualTo(updateTodoCommand.title());
+        assertThat(actualTodo.getComment()).isEqualTo(updateTodoCommand.comment());
+        assertThat(actualTodo.getDueDateTime()).isEqualTo(updateTodoCommand.dueDateTime());
+        assertThat(actualTodo.getTodoCategory().getId()).isEqualTo(todoCategoryId);
+        assertThat(actualTodo.isCompleted()).isEqualTo(updateTodoCommand.completed());
+    }
+
+    @Test
+    void testUpdateThrowsResourceNotFoundExceptionWhenTodoIsNotFound() {
+        Principal principal = getPrincipal();
+        Todo todo = getTodo();
+        UUID todoCategoryId = UUID.randomUUID();
+        TodoCategory todoCategory = getCategory();
+        todoCategory.setId(todoCategoryId);
+
+        UpdateTodoCommand updateTodoCommand = new UpdateTodoCommand(
+                "Go to gym",
+                "Got to the gym and do push ups",
+                todoCategoryId,
+                LocalDateTime.now(),
+                true
+        );
+
+        when(todoRepository.findByIdAndUser_Username(any(), anyString())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> todoService.update(todoId, principal, updateTodoCommand))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(String.format("Todo %s not found for user %s", todoId, principal.getName()));
+    }
+
+    private Principal getPrincipal() {
+        return () -> "username";
+    }
+
+    private Todo getTodo() {
+        return Todo.builder()
+                .title("Go to work")
+                .comment("Got to work and write some code dude")
+                .todoCategory(getCategory())
+                .completed(false)
+                .dueDateTime(LocalDateTime.now())
+                .build();
+    }
+
+
     private CreateTodoCommand getCreateTodoCommand() {
         return new CreateTodoCommand(
                 "Go to work",
                 "Got to work and write some code dude",
                 todoCategoryId,
                 LocalDateTime.now()
+        );
+    }
+
+    private UpdateTodoCommand getUpdateTodoCommand() {
+        return new UpdateTodoCommand(
+                "Go to gym",
+                "Got to the gym and do push ups",
+                todoCategoryId,
+                LocalDateTime.now(),
+                true
         );
     }
 
@@ -93,7 +181,5 @@ class TodoServiceImplTest {
                 .build();
     }
 
-    private Principal getPrincipal() {
-        return () -> "username";
-    }
+
 }

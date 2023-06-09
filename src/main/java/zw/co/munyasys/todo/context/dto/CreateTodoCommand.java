@@ -1,4 +1,4 @@
-package zw.co.munyasys.todo.context;
+package zw.co.munyasys.todo.context.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -10,10 +10,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record CreateTodoCommand(
-        @NotBlank(message = "Todo title should be provided") String title,
+        @NotBlank(message = "Todo title should be provided")
+        String title,
         String comment,
-
-        @NotNull(message = "Todo Category should be provided") UUID todoCategoryId,
+        @NotNull(message = "Todo Category should be provided")
+        UUID todoCategoryId,
 
         @FutureOrPresent
         @JsonFormat(pattern = BasicFormats.FULL_DATE_TIME)

@@ -1,4 +1,4 @@
-package zw.co.munyasys.todocategory.context;
+package zw.co.munyasys.todocategory.context.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;

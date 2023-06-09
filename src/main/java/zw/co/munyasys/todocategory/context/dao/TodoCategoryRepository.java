@@ -1,6 +1,7 @@
-package zw.co.munyasys.todocategory.context;
+package zw.co.munyasys.todocategory.context.dao;
 
 import zw.co.munyasys.common.jpa.BaseDao;
+import zw.co.munyasys.todocategory.context.model.TodoCategory;
 
 import java.util.List;
 import java.util.Optional;

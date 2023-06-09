@@ -1,4 +1,4 @@
-package zw.co.munyasys.todocategory.context;
+package zw.co.munyasys.todocategory.context.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

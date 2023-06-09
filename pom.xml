@@ -204,8 +204,8 @@
 						<include>zw/co/munyasys/**</include>
 					</includes>
 					<excludes>
-						<exclude>config/**</exclude>
 						<exclude>**/config/**</exclude>
+						<exclude>**/api/**</exclude>
 						<exclude>**/exceptionhandling/**</exclude>
 						<exclude>**/users/**</exclude>
 						<exclude>**/model/**</exclude>

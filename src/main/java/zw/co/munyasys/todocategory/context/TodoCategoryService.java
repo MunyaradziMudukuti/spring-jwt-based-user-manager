@@ -1,5 +1,7 @@
 package zw.co.munyasys.todocategory.context;
 
+import zw.co.munyasys.todocategory.context.model.TodoCategory;
+
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;

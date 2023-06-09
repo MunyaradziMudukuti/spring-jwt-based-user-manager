@@ -6,9 +6,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import zw.co.munyasys.todocategory.context.TodoCategoryCommand;
-import zw.co.munyasys.todocategory.context.TodoCategoryDto;
 import zw.co.munyasys.todocategory.context.TodoCategoryService;
+import zw.co.munyasys.todocategory.context.dto.TodoCategoryCommand;
+import zw.co.munyasys.todocategory.context.dto.TodoCategoryDto;
 
 import java.security.Principal;
 import java.util.List;
