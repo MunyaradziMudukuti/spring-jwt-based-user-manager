@@ -12,5 +12,7 @@ public interface TodoRepository extends BaseDao<Todo> {
 
     Optional<Todo> findByIdAndUser_Username(UUID uuid, String username);
 
+    Page<Todo> findByUser_UsernameAndTitleContainingIgnoreCase(String username, String title, Pageable pageable);
+
     Page<Todo> findByTitleContainingIgnoreCaseOrTodoCategory_NameContainingIgnoreCase(String title, String category, Pageable pageable);
 }

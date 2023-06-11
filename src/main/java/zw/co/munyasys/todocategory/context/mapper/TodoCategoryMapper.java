@@ -2,6 +2,8 @@ package zw.co.munyasys.todocategory.context.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import zw.co.munyasys.todocategory.context.dto.TodoCategoryCommand;
+import zw.co.munyasys.todocategory.context.dto.TodoCategoryDto;
 import zw.co.munyasys.todocategory.context.model.TodoCategory;
 
 import java.util.List;

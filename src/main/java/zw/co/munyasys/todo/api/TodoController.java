@@ -29,12 +29,6 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    @GetMapping
-    @ApiOperation("Get My Todos")
-    public ResponseEntity<Page<TodoDto>> getAll(Principal principal, @PageableDefault(sort = "title") Pageable pageable, @RequestParam(required = false) String searchTerm) {
-        Page<TodoDto> todos = todoService.findAll(principal, pageable, searchTerm);
-        return new ResponseEntity<>(todos, HttpStatus.OK);
-    }
 
     @PostMapping
     @ApiOperation("Create a Todo")
@@ -48,6 +42,12 @@ public class TodoController {
     public ResponseEntity<TodoDto> updateTodo(@PathVariable UUID todoId, Principal currentUser, @RequestBody @Valid UpdateTodoCommand updateTodoCommand) {
         TodoDto todoDto = todoService.update(todoId, currentUser, updateTodoCommand);
         return new ResponseEntity<>(todoDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    @ApiOperation("Search Todos")
+    public ResponseEntity<Page<TodoDto>> searchCustomer(Principal principal, @RequestParam("searchTerm") String searchTerm, @PageableDefault(sort = "dueDateTime") Pageable pageable) {
+        return new ResponseEntity<>(todoService.search(principal, searchTerm, pageable), HttpStatus.OK);
     }
 
 }

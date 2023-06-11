@@ -2,8 +2,13 @@ package zw.co.munyasys.todo.context;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import zw.co.munyasys.common.exceptions.ResourceNotFoundException;
 import zw.co.munyasys.todo.context.dao.TodoRepository;
 import zw.co.munyasys.todo.context.dto.CreateTodoCommand;
@@ -20,6 +25,7 @@ import zw.co.munyasys.users.service.read.UserReaderService;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -103,7 +109,6 @@ class TodoServiceImplTest {
     @Test
     void testUpdateThrowsResourceNotFoundExceptionWhenTodoIsNotFound() {
         Principal principal = getPrincipal();
-        Todo todo = getTodo();
         UUID todoCategoryId = UUID.randomUUID();
         TodoCategory todoCategory = getCategory();
         todoCategory.setId(todoCategoryId);
@@ -121,6 +126,37 @@ class TodoServiceImplTest {
         assertThatThrownBy(() -> todoService.update(todoId, principal, updateTodoCommand))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining(String.format("Todo %s not found for user %s", todoId, principal.getName()));
+    }
+
+    @Test
+    void testSearch() {
+        Principal principal = getPrincipal();
+        String searchTerm = "Work";
+        Pageable pageable = PageRequest.of(10, 10);
+        Todo todo = getTodo();
+
+        when(todoRepository.findByUser_UsernameAndTitleContainingIgnoreCase(any(), anyString(), any())).thenReturn(new PageImpl<>(List.of(todo)));
+
+        todoService.search(principal, searchTerm, pageable);
+
+        verify(todoRepository).findByUser_UsernameAndTitleContainingIgnoreCase(principal.getName(), searchTerm, pageable);
+        verify(todoRepository, never()).findAll(pageable);
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void testSearchReturnsAllTodosIfSearchTermIsBlank(boolean isNull) {
+        Principal principal = getPrincipal();
+        String searchTerm = isNull ? null : "";
+        Pageable pageable = PageRequest.of(10, 10);
+        Todo todo = getTodo();
+
+        when(todoRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(todo)));
+
+        todoService.search(principal, searchTerm, pageable);
+
+        verify(todoRepository, never()).findByUser_UsernameAndTitleContainingIgnoreCase(principal.getName(), searchTerm, pageable);
+        verify(todoRepository).findAll(pageable);
     }
 
     private Principal getPrincipal() {

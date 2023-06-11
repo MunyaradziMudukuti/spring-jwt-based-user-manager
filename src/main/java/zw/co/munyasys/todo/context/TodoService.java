@@ -10,9 +10,10 @@ import java.security.Principal;
 import java.util.UUID;
 
 public interface TodoService {
-    Page<TodoDto> findAll(Principal principal, Pageable pageable, String searchTerm);
 
     TodoDto create(Principal currentUser, CreateTodoCommand createTodoCommand);
 
     TodoDto update(UUID todoId, Principal currentUser, UpdateTodoCommand updateTodoCommand);
+
+    Page<TodoDto> search(Principal principal, String searchTerm, Pageable pageable);
 }

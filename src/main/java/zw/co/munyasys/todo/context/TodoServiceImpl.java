@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import zw.co.munyasys.common.exceptions.ResourceNotFoundException;
 import zw.co.munyasys.todo.context.dao.TodoRepository;
 import zw.co.munyasys.todo.context.dto.CreateTodoCommand;
@@ -12,7 +13,6 @@ import zw.co.munyasys.todo.context.dto.UpdateTodoCommand;
 import zw.co.munyasys.todo.context.mapper.TodoMapper;
 import zw.co.munyasys.todo.context.model.Todo;
 import zw.co.munyasys.todocategory.context.TodoCategoryService;
-import zw.co.munyasys.todocategory.context.dao.TodoCategoryRepository;
 import zw.co.munyasys.todocategory.context.model.TodoCategory;
 import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.read.UserReaderService;
@@ -23,27 +23,16 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class TodoServiceImpl implements TodoService {
-    private final TodoCategoryRepository todoCategoryRepository;
     private final TodoRepository todoRepository;
     private final TodoCategoryService todoCategoryService;
     private final UserReaderService userReaderService;
     private final TodoMapper mapper;
 
-    public TodoServiceImpl(TodoRepository todoRepository, TodoCategoryService todoCategoryService, UserReaderService userReaderService, TodoMapper mapper,
-                           TodoCategoryRepository todoCategoryRepository) {
+    public TodoServiceImpl(TodoRepository todoRepository, TodoCategoryService todoCategoryService, UserReaderService userReaderService, TodoMapper mapper) {
         this.todoRepository = todoRepository;
         this.todoCategoryService = todoCategoryService;
         this.userReaderService = userReaderService;
         this.mapper = mapper;
-        this.todoCategoryRepository = todoCategoryRepository;
-    }
-
-    @Override
-    public Page<TodoDto> findAll(Principal principal, Pageable pageable, String searchTerm) {
-
-        String username = principal.getName();
-
-        return null;
     }
 
     @Override
@@ -76,5 +65,16 @@ public class TodoServiceImpl implements TodoService {
         todo.setTodoCategory(todoCategory);
 
         return mapper.toDto(todoRepository.save(todo));
+    }
+
+    @Override
+    public Page<TodoDto> search(Principal principal, String searchTerm, Pageable pageable) {
+        Page<Todo> todos;
+        if (StringUtils.hasText(searchTerm)) {
+            todos = todoRepository.findByUser_UsernameAndTitleContainingIgnoreCase(principal.getName(), searchTerm, pageable);
+        } else {
+            todos = todoRepository.findAll(pageable);
+        }
+        return todos.map(mapper::toDto);
     }
 }
