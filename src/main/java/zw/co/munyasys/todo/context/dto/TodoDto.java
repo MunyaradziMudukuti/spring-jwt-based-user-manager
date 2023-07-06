@@ -10,7 +10,7 @@ public record TodoDto(
         String title,
         String comment,
         LocalDateTime dueDateTime,
-        boolean isCompleted,
+        boolean completed,
         TodoCategoryDto todoCategory
 ) {
 }

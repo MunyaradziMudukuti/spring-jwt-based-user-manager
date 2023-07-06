@@ -1,7 +1,9 @@
 package zw.co.munyasys.users.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import zw.co.munyasys.common.jpa.BaseEntity;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -33,27 +34,11 @@ public class User extends BaseEntity implements UserDetails {
 
     private boolean enabled;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
-    private String mobileNumber;
-
     @Transient
     private Set<GrantedAuthority> authorities;
-
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING, timezone = "Africa/Harare", locale = "en_ZW")
-    private LocalDate dateOfBirth;
 
     @Override
     public boolean equals(Object o) {

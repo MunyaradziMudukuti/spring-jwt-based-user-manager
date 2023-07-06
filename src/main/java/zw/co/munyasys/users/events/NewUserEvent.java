@@ -9,11 +9,8 @@ public class NewUserEvent extends ApplicationEvent {
 
     private final User user;
 
-    private final String rawPassword;
-
-    public NewUserEvent(Object source, User user, String rawPassword) {
+    public NewUserEvent(Object source, User user) {
         super(source);
         this.user = user;
-        this.rawPassword = rawPassword;
     }
 }

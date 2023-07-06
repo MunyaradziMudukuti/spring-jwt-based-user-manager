@@ -11,12 +11,10 @@ import zw.co.munyasys.todocategory.context.dto.TodoCategoryCommand;
 import zw.co.munyasys.todocategory.context.dto.TodoCategoryDto;
 import zw.co.munyasys.todocategory.context.mapper.TodoCategoryMapper;
 import zw.co.munyasys.todocategory.context.model.TodoCategory;
-import zw.co.munyasys.users.model.Gender;
 import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.read.UserReaderService;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -164,13 +162,10 @@ class TodoCategoryServiceImplTest {
     private User getUser() {
         return User.builder()
                 .email("test@mail.com")
-                .dateOfBirth(LocalDate.of(1999, 3, 4))
                 .enabled(true)
-                .firstName("Munyaradzi Linos")
-                .lastName("Mudukuti")
-                .mobileNumber("0772994739")
                 .username("test@mail.com")
-                .gender(Gender.MALE)
+
+
                 .build();
     }
 

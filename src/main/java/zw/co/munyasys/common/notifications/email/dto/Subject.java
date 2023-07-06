@@ -1,4 +1,4 @@
-package zw.co.munyasys.common.notifications.dto;
+package zw.co.munyasys.common.notifications.email.dto;
 
 import lombok.Data;
 

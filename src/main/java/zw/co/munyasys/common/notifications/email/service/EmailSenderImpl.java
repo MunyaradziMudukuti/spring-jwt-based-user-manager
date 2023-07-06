@@ -1,9 +1,9 @@
-package zw.co.munyasys.common.notifications.service;
+package zw.co.munyasys.common.notifications.email.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
-import zw.co.munyasys.common.notifications.core.EmailSenderProcessor;
-import zw.co.munyasys.common.notifications.dto.*;
+import zw.co.munyasys.common.notifications.email.core.EmailSenderProcessor;
+import zw.co.munyasys.common.notifications.email.dto.*;
 
 import java.util.Collection;
 import java.util.HashSet;

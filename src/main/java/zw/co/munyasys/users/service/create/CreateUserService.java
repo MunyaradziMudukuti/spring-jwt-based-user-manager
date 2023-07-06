@@ -12,6 +12,8 @@ import zw.co.munyasys.users.mapper.UserMapper;
 import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.password.PasswordGenerator;
 
+import java.util.Objects;
+
 
 @Service
 @Transactional
@@ -37,20 +39,23 @@ public class CreateUserService {
 
     public UserDto execute(CreateUserRequest createUserRequest) {
 
+        if (!Objects.equals(createUserRequest.password(), createUserRequest.confirmPassword())) {
+            throw new InvalidRequestException("Password and confirm password does not match");
+        }
+
         if (userRepository.existsByEmail(createUserRequest.email())) {
             throw new InvalidRequestException("User with the same email [" + createUserRequest.email() + "] " + "already exists");
         }
 
         User user = userMapper.toEntity(createUserRequest);
 
-        String password = passwordGenerator.generate();
-
+        String password = createUserRequest.password();
         user.setPassword(passwordEncoder.encode(password));
         user.setEnabled(true);
 
         User persistedUser = userRepository.save(user);
 
-        NewUserEvent newUserEvent = new NewUserEvent(this, persistedUser, password);
+        NewUserEvent newUserEvent = new NewUserEvent(this, persistedUser);
 
         applicationEventPublisher.publishEvent(newUserEvent);
 

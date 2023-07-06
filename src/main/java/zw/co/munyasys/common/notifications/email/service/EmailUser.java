@@ -1,4 +1,4 @@
-package zw.co.munyasys.common.notifications.service;
+package zw.co.munyasys.common.notifications.email.service;
 
 public interface EmailUser {
 

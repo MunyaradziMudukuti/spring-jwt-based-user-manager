@@ -1,4 +1,4 @@
-package zw.co.munyasys.common.notifications.core;
+package zw.co.munyasys.common.notifications.email.core;
 
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;

@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-import zw.co.munyasys.common.notifications.service.EmailMessageFormatter;
-import zw.co.munyasys.common.notifications.service.EmailMessageNotifierTemplate;
-import zw.co.munyasys.common.notifications.service.EmailSender;
-import zw.co.munyasys.common.notifications.service.EmailUserImpl;
+import zw.co.munyasys.common.notifications.email.service.EmailMessageFormatter;
+import zw.co.munyasys.common.notifications.email.service.EmailMessageNotifierTemplate;
+import zw.co.munyasys.common.notifications.email.service.EmailSender;
+import zw.co.munyasys.common.notifications.email.service.EmailUserImpl;
 import zw.co.munyasys.users.model.User;
 
 @Component

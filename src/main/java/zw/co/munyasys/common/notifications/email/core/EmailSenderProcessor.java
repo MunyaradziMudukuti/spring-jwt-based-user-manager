@@ -1,4 +1,4 @@
-package zw.co.munyasys.common.notifications.core;
+package zw.co.munyasys.common.notifications.email.core;
 
 @FunctionalInterface
 public interface EmailSenderProcessor {

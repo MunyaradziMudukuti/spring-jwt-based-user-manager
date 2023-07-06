@@ -4,6 +4,7 @@ import zw.co.munyasys.common.jpa.BaseDao;
 import zw.co.munyasys.users.model.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository extends BaseDao<User> {
 
@@ -13,7 +14,7 @@ public interface UserRepository extends BaseDao<User> {
 
     Optional<User> findByEmail(String email);
 
-    boolean existsByUsername(String username);
+    boolean existsByUsernameAndIdIsNot(String username, UUID id);
 
     boolean existsByEmail(String email);
 }

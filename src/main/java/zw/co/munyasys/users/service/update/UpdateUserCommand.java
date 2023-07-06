@@ -3,23 +3,10 @@ package zw.co.munyasys.users.service.update;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import zw.co.munyasys.users.model.Gender;
 
 import java.time.LocalDate;
 
 public record UpdateUserCommand(
-
-        @NotBlank(message = "Username should be provided")
-        String username,
-
-        @NotBlank(message = "First name should be provided")
-        String firstName,
-
-        @NotBlank(message = "Last name should be provided")
-        String lastName,
-
-        Gender gender,
-
         @NotBlank(message = "Email should be provided")
         @Email(message = "A valid email should be provided")
         String email,

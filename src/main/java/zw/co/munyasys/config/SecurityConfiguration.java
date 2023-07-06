@@ -28,10 +28,8 @@ public class SecurityConfiguration {
             "/refresh",
             "/v3/api-docs",
             "/spec.html",
-            "/open-api.yml",
-            "/v1/users/sign-up",
-            "/swagger-ui.html",
-            "/v1/migration/users", "/webhooks/**"};
+            "/v1/users/sign-up"
+    };
     private final JwtRequestFilter jwtAuthFilter;
     private final JwtAuthenticationEntryPoint entryPoint;
     private final UserDetailsService userDetailsService;

@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import zw.co.munyasys.common.notifications.service.EmailMessageNotifierTemplate;
-import zw.co.munyasys.common.notifications.service.EmailSender;
-import zw.co.munyasys.common.notifications.service.EmailUserImpl;
+import zw.co.munyasys.common.notifications.email.service.EmailMessageNotifierTemplate;
+import zw.co.munyasys.common.notifications.email.service.EmailSender;
+import zw.co.munyasys.common.notifications.email.service.EmailUserImpl;
 import zw.co.munyasys.users.model.User;
 
 import java.util.HashMap;
@@ -42,7 +42,6 @@ public class NewUserEventEmailSendingListener extends EmailMessageNotifierTempla
 
         val table = new HashMap<String, String>();
         table.put("username", user.getUsername());
-        table.put("password", newUserEvent.getRawPassword());
 
         emailMessageFormatter.addTabularHierarchy("Account credentials", table);
 

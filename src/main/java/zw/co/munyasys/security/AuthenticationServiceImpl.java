@@ -98,17 +98,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         claims.put("user_id", user.getId());
 
-        claims.put("preferred_username", user.getEmail());
+        claims.put("username", user.getEmail());
 
         claims.put("given_name", user.getEmail());
 
-        claims.put("first_name", user.getFirstName());
-
-        claims.put("last_name", user.getLastName());
-
         claims.put("email", user.getEmail());
-
-        claims.put("mobile_number", user.getMobileNumber());
 
         claims.put(TOKEN_TYPE, "access");
 

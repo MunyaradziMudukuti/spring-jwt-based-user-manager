@@ -1,4 +1,4 @@
-package zw.co.munyasys.common.notifications.core;
+package zw.co.munyasys.common.notifications.email.core;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import zw.co.munyasys.common.notifications.dto.Attachment;
-import zw.co.munyasys.common.notifications.dto.Body;
-import zw.co.munyasys.common.notifications.dto.EmailRecipient;
-import zw.co.munyasys.common.notifications.dto.RecipientType;
+import zw.co.munyasys.common.notifications.email.dto.Attachment;
+import zw.co.munyasys.common.notifications.email.dto.Body;
+import zw.co.munyasys.common.notifications.email.dto.EmailRecipient;
+import zw.co.munyasys.common.notifications.email.dto.RecipientType;
 
 import java.util.List;
 import java.util.Map;

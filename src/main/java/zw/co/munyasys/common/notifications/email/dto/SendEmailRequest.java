@@ -1,7 +1,7 @@
-package zw.co.munyasys.common.notifications.dto;
+package zw.co.munyasys.common.notifications.email.dto;
 
 import lombok.Data;
-import zw.co.munyasys.common.notifications.core.EmailContext;
+import zw.co.munyasys.common.notifications.email.core.EmailContext;
 
 import java.util.Collections;
 import java.util.HashSet;
