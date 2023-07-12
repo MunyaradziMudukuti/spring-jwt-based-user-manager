@@ -8,7 +8,7 @@ import java.util.UUID;
 public record TodoDto(
         UUID id,
         String title,
-        String comment,
+        String description,
         LocalDateTime dueDateTime,
         boolean completed,
         TodoCategoryDto todoCategory

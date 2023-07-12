@@ -67,7 +67,7 @@ class TodoServiceImplTest {
         Todo actualTodo = todoArgumentCaptor.getValue();
 
         assertThat(actualTodo.getTitle()).isEqualTo(createTodoCommand.title());
-        assertThat(actualTodo.getComment()).isEqualTo(createTodoCommand.comment());
+        assertThat(actualTodo.getDescription()).isEqualTo(createTodoCommand.description());
         assertThat(actualTodo.getDueDateTime()).isEqualTo(createTodoCommand.dueDateTime());
         assertThat(actualTodo.getTodoCategory().getId()).isEqualTo(todoCategoryId);
         assertThat(actualTodo.isCompleted()).isFalse();
@@ -98,7 +98,7 @@ class TodoServiceImplTest {
         Todo actualTodo = todoArgumentCaptor.getValue();
 
         assertThat(actualTodo.getTitle()).isEqualTo(updateTodoCommand.title());
-        assertThat(actualTodo.getComment()).isEqualTo(updateTodoCommand.comment());
+        assertThat(actualTodo.getDescription()).isEqualTo(updateTodoCommand.description());
         assertThat(actualTodo.getDueDateTime()).isEqualTo(updateTodoCommand.dueDateTime());
         assertThat(actualTodo.getTodoCategory().getId()).isEqualTo(todoCategoryId);
         assertThat(actualTodo.isCompleted()).isEqualTo(updateTodoCommand.completed());
@@ -164,7 +164,7 @@ class TodoServiceImplTest {
     private Todo getTodo() {
         return Todo.builder()
                 .title("Go to work")
-                .comment("Got to work and write some code dude")
+                .description("Got to work and write some code dude")
                 .todoCategory(getCategory())
                 .completed(false)
                 .dueDateTime(LocalDateTime.now())

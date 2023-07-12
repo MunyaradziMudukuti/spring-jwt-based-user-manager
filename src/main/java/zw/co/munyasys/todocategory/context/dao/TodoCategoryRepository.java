@@ -12,7 +12,9 @@ public interface TodoCategoryRepository extends BaseDao<TodoCategory> {
 
     boolean existsByIdIsNotAndUser_UsernameAndName(UUID id, String username, String name);
 
-    List<TodoCategory> findByUser_Username(String username);
+    List<TodoCategory> findByUser_UsernameOrName(String username, String name);
 
     Optional<TodoCategory> findByIdAndUser_Username(UUID id, String username);
+
+    Optional<TodoCategory> findByNameIgnoreCase(String name);
 }

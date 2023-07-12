@@ -16,6 +16,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
+import static zw.co.munyasys.common.Constants.DEFAULT_CATEGORY;
+
 @Slf4j
 @Service
 public class TodoCategoryServiceImpl implements TodoCategoryService {
@@ -36,11 +38,12 @@ public class TodoCategoryServiceImpl implements TodoCategoryService {
         final User user = userReaderService.getLoggedInUser();
         String username = user.getUsername();
 
+        String categoryName = createTodoCategoryCommand.name();
         boolean existsByName = todoCategoryRepository.existsByUser_UsernameAndName(username, createTodoCategoryCommand.name());
 
-        if (existsByName) {
-            log.error("Create Todo Category failed for user % -> Todo Category {} already exists {}", username, createTodoCategoryCommand.name());
-            throw new DuplicateResourceException(String.format("Todo Category %s already exists", createTodoCategoryCommand.name()));
+        if (existsByName || categoryName.equals(DEFAULT_CATEGORY)) {
+            log.error("Create Todo Category failed for user % -> Todo Category {} already exists {}", username, categoryName);
+            throw new DuplicateResourceException(String.format("Todo Category %s already exists", categoryName));
         }
 
         final TodoCategory todoCategory = mapper.toEntity(createTodoCategoryCommand);
@@ -53,7 +56,7 @@ public class TodoCategoryServiceImpl implements TodoCategoryService {
     @Override
     public List<TodoCategoryDto> getCategories(Principal principal) {
         String username = principal.getName();
-        List<TodoCategory> todoCategories = todoCategoryRepository.findByUser_Username(username);
+        List<TodoCategory> todoCategories = todoCategoryRepository.findByUser_UsernameOrName(username, DEFAULT_CATEGORY);
         return mapper.toDtos(todoCategories);
     }
 

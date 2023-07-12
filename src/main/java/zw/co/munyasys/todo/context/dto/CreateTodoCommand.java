@@ -12,7 +12,7 @@ import java.util.UUID;
 public record CreateTodoCommand(
         @NotBlank(message = "Todo title should be provided")
         String title,
-        String comment,
+        String description,
         @NotNull(message = "Todo Category should be provided")
         UUID todoCategoryId,
 

@@ -29,9 +29,9 @@ public class NewUserEventEmailSendingListener extends EmailMessageNotifierTempla
     @Async
     public void onApplicationEvent(NewUserEvent newUserEvent) {
 
-        log.info("################# Reactivation Email Processing");
-
         User user = newUserEvent.getUser();
+
+        log.info("################# User {} Activation Email Processing", user.getId());
 
         subject = "User account for " + systemName + " created successfully";
 
@@ -50,7 +50,7 @@ public class NewUserEventEmailSendingListener extends EmailMessageNotifierTempla
 
         sendEmail();
 
-        log.info("################# Reactivation Email Sent");
+        log.info("################# User {} Activation Email Sent", user.getId());
 
     }
 

@@ -22,6 +22,7 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
+import static zw.co.munyasys.common.Constants.DEFAULT_CATEGORY;
 
 @ExtendWith(MockitoExtension.class)
 class TodoCategoryServiceImplTest {
@@ -78,11 +79,11 @@ class TodoCategoryServiceImplTest {
         Principal principal = getPrincipal();
         TodoCategory todoCategory = getCategory();
 
-        when(todoCategoryRepository.findByUser_Username(any())).thenReturn(List.of(todoCategory));
+        when(todoCategoryRepository.findByUser_UsernameOrName(any(), any())).thenReturn(List.of(todoCategory));
 
         List<TodoCategoryDto> todoCategoryDtos = todoCategoryService.getCategories(principal);
 
-        verify(todoCategoryRepository).findByUser_Username(principal.getName());
+        verify(todoCategoryRepository).findByUser_UsernameOrName(principal.getName(), DEFAULT_CATEGORY);
 
         TodoCategoryDto actualCategory = todoCategoryDtos.get(0);
 

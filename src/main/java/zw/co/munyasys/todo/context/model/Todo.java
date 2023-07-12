@@ -25,7 +25,7 @@ public class Todo extends BaseEntity {
     private String title;
 
     @Size(max = 250)
-    private String comment;
+    private String description;
 
     private boolean completed;
 
@@ -48,12 +48,12 @@ public class Todo extends BaseEntity {
         this.title = title;
     }
 
-    public String getComment() {
-        return comment;
+    public String getDescription() {
+        return description;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean isCompleted() {
