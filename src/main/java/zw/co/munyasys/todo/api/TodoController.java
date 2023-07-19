@@ -44,6 +44,13 @@ public class TodoController {
         return new ResponseEntity<>(todoDto, HttpStatus.OK);
     }
 
+    @DeleteMapping("{todoId}")
+    @ApiOperation("Delete a Todo")
+    public ResponseEntity<?> deleteTodo(@PathVariable UUID todoId, Principal currentUser) {
+        todoService.delete(todoId, currentUser);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/search")
     @ApiOperation("Search Todos")
     public ResponseEntity<Page<TodoDto>> searchCustomer(Principal principal, @RequestParam("searchTerm") String searchTerm, @PageableDefault(sort = "createdDate") Pageable pageable) {

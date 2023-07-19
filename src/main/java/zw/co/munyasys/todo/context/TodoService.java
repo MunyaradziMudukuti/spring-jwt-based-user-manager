@@ -16,4 +16,6 @@ public interface TodoService {
     TodoDto update(UUID todoId, Principal currentUser, UpdateTodoCommand updateTodoCommand);
 
     Page<TodoDto> search(Principal principal, String searchTerm, Pageable pageable);
+
+    void delete(UUID todoId, Principal currentUser);
 }

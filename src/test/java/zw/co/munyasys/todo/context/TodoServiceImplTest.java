@@ -127,6 +127,26 @@ class TodoServiceImplTest {
     }
 
     @Test
+    void testDeleteThrowsResourceNotFoundExceptionWhenTodoIsNotFound() {
+        Principal principal = getPrincipal();
+
+        when(todoRepository.findByIdAndUser_Username(any(), anyString())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> todoService.delete(todoId, principal))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(String.format("Todo %s not found for user %s", todoId, principal.getName()));
+    }
+
+    @Test
+    void testDelete() {
+        Principal principal = getPrincipal();
+
+        when(todoRepository.findByIdAndUser_Username(any(), anyString())).thenReturn(Optional.of(getTodo()));
+        todoService.delete(todoId, principal);
+        verify(todoRepository).deleteByIdAndUserUsername(todoId, principal.getName());
+    }
+
+    @Test
     void testSearch() {
         Principal principal = getPrincipal();
         String searchTerm = "Work";

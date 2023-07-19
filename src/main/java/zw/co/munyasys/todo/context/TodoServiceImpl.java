@@ -77,4 +77,13 @@ public class TodoServiceImpl implements TodoService {
         }
         return todos.map(mapper::toDto);
     }
+
+    @Override
+    public void delete(UUID todoId, Principal currentUser) {
+        String username = currentUser.getName();
+
+        todoRepository.findByIdAndUser_Username(todoId, username)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Todo %s not found for user %s", todoId, username)));
+        todoRepository.deleteByIdAndUserUsername(todoId, username);
+    }
 }
