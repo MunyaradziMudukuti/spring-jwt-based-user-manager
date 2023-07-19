@@ -24,7 +24,8 @@ import zw.co.munyasys.security.JwtRequestFilter;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    final String[] WHITELISTED_ENDPOINTS = {"/login",
+    final String[] WHITELISTED_ENDPOINTS = {
+            "/login",
             "/refresh",
             "/v3/api-docs",
             "/spec.html",

@@ -2,18 +2,15 @@ package zw.co.munyasys.security.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zw.co.munyasys.security.AuthRequest;
 import zw.co.munyasys.security.AuthResponse;
 import zw.co.munyasys.security.AuthenticationService;
-import zw.co.munyasys.security.RefreshTokenRequest;
 
 @RestController
 @CrossOrigin
@@ -32,16 +29,16 @@ public class AuthenticationController {
             log.info("Authenticating user: {}", authRequest.getUsername());
             return ResponseEntity.ok(login(authRequest));
         } catch (Exception ex) {
-            log.error("Authentication error {}", ex);
+            log.error("Authentication error {}", ex.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
         }
     }
 
     @PostMapping(value = "/refresh")
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<?> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         try {
-            log.info("Request refresh token: {}", request.getToken());
-            return ResponseEntity.ok(authenticationService.refreshToken(request.getToken()));
+            log.info("Request refresh auth header: {}", authHeader);
+            return ResponseEntity.ok(authenticationService.refreshToken(authHeader));
         } catch (Exception ex) {
             log.error("", ex);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());

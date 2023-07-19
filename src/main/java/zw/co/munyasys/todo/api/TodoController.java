@@ -46,7 +46,7 @@ public class TodoController {
 
     @GetMapping("/search")
     @ApiOperation("Search Todos")
-    public ResponseEntity<Page<TodoDto>> searchCustomer(Principal principal, @RequestParam("searchTerm") String searchTerm, @PageableDefault(sort = "dueDateTime") Pageable pageable) {
+    public ResponseEntity<Page<TodoDto>> searchCustomer(Principal principal, @RequestParam("searchTerm") String searchTerm, @PageableDefault(sort = "createdDate") Pageable pageable) {
         return new ResponseEntity<>(todoService.search(principal, searchTerm, pageable), HttpStatus.OK);
     }
 

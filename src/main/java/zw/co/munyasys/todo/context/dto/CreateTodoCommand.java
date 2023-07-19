@@ -18,6 +18,7 @@ public record CreateTodoCommand(
 
         @FutureOrPresent
         @JsonFormat(pattern = BasicFormats.FULL_DATE_TIME)
-        @NotNull(message = "Due Date Time should be provided") LocalDateTime dueDateTime
+        // @NotNull(message = "Due Date Time should be provided")
+        LocalDateTime dueDateTime
 ) {
 }

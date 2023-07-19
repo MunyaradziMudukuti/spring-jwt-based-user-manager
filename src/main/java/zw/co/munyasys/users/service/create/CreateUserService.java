@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import zw.co.munyasys.common.exceptions.InvalidRequestException;
+import zw.co.munyasys.common.exceptions.DuplicateResourceException;
 import zw.co.munyasys.users.dao.UserRepository;
 import zw.co.munyasys.users.dto.UserDto;
 import zw.co.munyasys.users.events.NewUserEvent;
@@ -40,11 +40,11 @@ public class CreateUserService {
     public UserDto execute(CreateUserRequest createUserRequest) {
 
         if (!Objects.equals(createUserRequest.password(), createUserRequest.confirmPassword())) {
-            throw new InvalidRequestException("Password and confirm password does not match");
+            throw new DuplicateResourceException("Password and confirm password does not match");
         }
 
         if (userRepository.existsByEmail(createUserRequest.email())) {
-            throw new InvalidRequestException("User with the same email [" + createUserRequest.email() + "] " + "already exists");
+            throw new DuplicateResourceException("User with the same email [" + createUserRequest.email() + "] " + "already exists");
         }
 
         User user = userMapper.toEntity(createUserRequest);

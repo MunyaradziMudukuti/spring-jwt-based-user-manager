@@ -14,6 +14,7 @@ import zw.co.munyasys.users.service.read.UserReaderService;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static zw.co.munyasys.common.Constants.DEFAULT_CATEGORY;
@@ -84,5 +85,12 @@ public class TodoCategoryServiceImpl implements TodoCategoryService {
     public TodoCategory findByIdAndUsername(UUID id, String username) {
         return todoCategoryRepository.findByIdAndUser_Username(id, username)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Todo Category with id %s not found for user %s", id, username)));
+    }
+
+    @Override
+    public TodoCategory fetchUserCategoryOrDefaultById(UUID id, String username) {
+        Optional<TodoCategory> optionalTodoCategory = todoCategoryRepository.findByIdAndUser_Username(id, username);
+        return optionalTodoCategory.orElseGet(() -> todoCategoryRepository.findByIdAndNameIgnoreCase(id, DEFAULT_CATEGORY)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Todo Category with id %s not found for user %s", id, username))));
     }
 }

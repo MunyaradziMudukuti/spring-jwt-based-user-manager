@@ -16,4 +16,6 @@ public interface TodoCategoryService {
     TodoCategoryDto update(UUID todoCategoryId, Principal currentUser, TodoCategoryCommand updateTodoCategoryCommand);
 
     TodoCategory findByIdAndUsername(UUID id, String username);
+
+    TodoCategory fetchUserCategoryOrDefaultById(UUID id, String username);
 }

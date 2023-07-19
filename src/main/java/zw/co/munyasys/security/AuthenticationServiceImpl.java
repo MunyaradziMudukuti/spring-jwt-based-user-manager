@@ -2,6 +2,7 @@ package zw.co.munyasys.security;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 import static zw.co.munyasys.common.Constants.BEARER;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -56,9 +58,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new RuntimeException("Invalid token provided");
         }
 
-        final String id = claims.getId();
+        final UUID id = UUID.fromString(claims.get("rid").toString());
 
-        final User user = userService.findById(UUID.fromString(id));
+        log.info("Refresh user if: {}", id);
+
+        final User user = userService.findById(id);
 
         return getAuthResponse(user);
 
@@ -73,7 +77,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private AuthResponse getAuthResponse(User user) {
         final String tokenId = UUID.randomUUID().toString();
-        final String refreshToken = jwtService.generateToken(tokenId, getRefreshClaims(tokenId), user);
+        final String refreshToken = jwtService.generateToken(tokenId, getRefreshClaims(user.getId().toString()), user);
         final String token = jwtService.generateToken(tokenId, getUserClaims(user, tokenId), user);
 
         return AuthResponse.builder()

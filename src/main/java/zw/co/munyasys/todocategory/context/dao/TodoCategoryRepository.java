@@ -17,4 +17,6 @@ public interface TodoCategoryRepository extends BaseDao<TodoCategory> {
     Optional<TodoCategory> findByIdAndUser_Username(UUID id, String username);
 
     Optional<TodoCategory> findByNameIgnoreCase(String name);
+
+    Optional<TodoCategory> findByIdAndNameIgnoreCase(UUID id, String name);
 }

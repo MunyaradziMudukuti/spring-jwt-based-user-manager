@@ -42,7 +42,7 @@ public class TodoServiceImpl implements TodoService {
 
         final Todo todo = mapper.toEntity(createTodoCommand);
 
-        TodoCategory todoCategory = todoCategoryService.findByIdAndUsername(createTodoCommand.todoCategoryId(), username);
+        TodoCategory todoCategory = todoCategoryService.fetchUserCategoryOrDefaultById(createTodoCommand.todoCategoryId(), username);
 
         todo.setUser(user);
         todo.setTodoCategory(todoCategory);
@@ -58,7 +58,7 @@ public class TodoServiceImpl implements TodoService {
         Todo todo = todoRepository.findByIdAndUser_Username(todoId, username)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Todo %s not found for user %s", todoId, username)));
 
-        TodoCategory todoCategory = todoCategoryService.findByIdAndUsername(updateTodoCommand.todoCategoryId(), username);
+        TodoCategory todoCategory = todoCategoryService.fetchUserCategoryOrDefaultById(updateTodoCommand.todoCategoryId(), username);
 
         todo = mapper.updateEntity(todo, updateTodoCommand);
 
