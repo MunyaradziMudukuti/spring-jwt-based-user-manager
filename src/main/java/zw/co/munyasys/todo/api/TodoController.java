@@ -51,6 +51,13 @@ public class TodoController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("{todoId}")
+    @ApiOperation("Get Todo By ID")
+    public ResponseEntity<TodoDto> getTodoById(@PathVariable UUID todoId, Principal currentUser) {
+        return new ResponseEntity<>(todoService.findMyTodoById(todoId, currentUser), HttpStatus.OK);
+    }
+
+
     @GetMapping("/search")
     @ApiOperation("Search Todos")
     public ResponseEntity<Page<TodoDto>> searchCustomer(Principal principal, @RequestParam("searchTerm") String searchTerm, @PageableDefault(sort = "createdDate") Pageable pageable) {

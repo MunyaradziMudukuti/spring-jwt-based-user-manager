@@ -18,4 +18,6 @@ public interface TodoService {
     Page<TodoDto> search(Principal principal, String searchTerm, Pageable pageable);
 
     void delete(UUID todoId, Principal currentUser);
+
+    TodoDto findMyTodoById(UUID todoId, Principal currentUser);
 }
