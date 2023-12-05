@@ -6,10 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @Slf4j
-public class TodoApplication {
-
+public class JWTBasedUserManagementApplication {
     public static void main(String[] args) {
-        SpringApplication.run(TodoApplication.class, args);
+        SpringApplication.run(JWTBasedUserManagementApplication.class, args);
     }
 
 }

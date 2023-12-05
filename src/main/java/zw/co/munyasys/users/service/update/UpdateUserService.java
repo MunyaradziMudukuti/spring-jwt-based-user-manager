@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zw.co.munyasys.common.exceptions.InvalidRequestException;
 import zw.co.munyasys.users.dao.UserRepository;
-import zw.co.munyasys.users.dto.UserDto;
-import zw.co.munyasys.users.mapper.UserMapper;
 import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.read.UserReaderService;
 
@@ -20,15 +18,13 @@ public class UpdateUserService {
 
     private final UserRepository userRepository;
     private final UserReaderService userReaderService;
-    private final UserMapper userMapper;
 
-    public UpdateUserService(UserRepository userRepository, UserReaderService userReaderService, UserMapper userMapper) {
+    public UpdateUserService(UserRepository userRepository, UserReaderService userReaderService) {
         this.userRepository = userRepository;
         this.userReaderService = userReaderService;
-        this.userMapper = userMapper;
     }
 
-    public UserDto updateMyAccount(Principal loggedInUser, UpdateUserCommand updateUserCommand) {
+    public User updateMyAccount(Principal loggedInUser, UpdateUserCommand updateUserCommand) {
 
         String username = loggedInUser.getName();
 
@@ -43,6 +39,6 @@ public class UpdateUserService {
         user.setEmail(updateUserCommand.email());
         user.setUsername(updateUserCommand.email());
 
-        return userMapper.toDto(userRepository.save(user));
+        return userRepository.save(user);
     }
 }

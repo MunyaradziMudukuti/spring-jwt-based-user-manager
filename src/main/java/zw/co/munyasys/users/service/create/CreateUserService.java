@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zw.co.munyasys.common.exceptions.DuplicateResourceException;
 import zw.co.munyasys.users.dao.UserRepository;
-import zw.co.munyasys.users.dto.UserDto;
 import zw.co.munyasys.users.events.NewUserEvent;
-import zw.co.munyasys.users.mapper.UserMapper;
 import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.password.PasswordGenerator;
 
@@ -27,17 +25,14 @@ public class CreateUserService {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    private final UserMapper userMapper;
-
-    public CreateUserService(PasswordEncoder passwordEncoder, PasswordGenerator passwordGenerator, UserRepository userRepository, ApplicationEventPublisher applicationEventPublisher, UserMapper userMapper) {
+    public CreateUserService(PasswordEncoder passwordEncoder, PasswordGenerator passwordGenerator, UserRepository userRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.passwordEncoder = passwordEncoder;
         this.passwordGenerator = passwordGenerator;
         this.userRepository = userRepository;
         this.applicationEventPublisher = applicationEventPublisher;
-        this.userMapper = userMapper;
     }
 
-    public UserDto execute(CreateUserRequest createUserRequest) {
+    public User execute(CreateUserRequest createUserRequest) {
 
         if (!Objects.equals(createUserRequest.password(), createUserRequest.confirmPassword())) {
             throw new DuplicateResourceException("Password and confirm password does not match");
@@ -47,9 +42,13 @@ public class CreateUserService {
             throw new DuplicateResourceException("User with the same email [" + createUserRequest.email() + "] " + "already exists");
         }
 
-        User user = userMapper.toEntity(createUserRequest);
+        User user = User.builder()
+                .username(createUserRequest.email())
+                .email(createUserRequest.email())
+                .build();
 
         String password = createUserRequest.password();
+
         user.setPassword(passwordEncoder.encode(password));
         user.setEnabled(true);
 
@@ -59,7 +58,7 @@ public class CreateUserService {
 
         applicationEventPublisher.publishEvent(newUserEvent);
 
-        return userMapper.toDto(persistedUser);
+        return persistedUser;
     }
 
 }

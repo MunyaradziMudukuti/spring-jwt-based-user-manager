@@ -7,16 +7,16 @@ spring:
     username: user
     password: "password"
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:9786/todo_db?autoReconnect=true&createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Africa/Harare&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:9786/user_db?autoReconnect=true&createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Africa/Harare&rewriteBatchedStatements=true
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL8Dialect
   mail:
-    host: smtp.mail.yahoo.com
+    host: smtp.xxx.com
     port: 587
-    password: svzvbedvunljayph
-    username: munyaradzimudukuti@yahoo.com
+    password: xxxxx
+    username: xxxxxx
     properties:
       mail:
         smtp:
@@ -29,11 +29,11 @@ server:
 jwt:
   secret: "82F413F4428472B4B6250645367566B5970404E635266556A586E32723575387"
 system:
-  name: MDK TODO APP
+  name: JWT Based User Management
 
 email:
   origin:
-    sender: munyaradzimudukuti@yahoo.com
+    sender: cbcv@xxx.com
 
 file-storage:
   base-path: ./

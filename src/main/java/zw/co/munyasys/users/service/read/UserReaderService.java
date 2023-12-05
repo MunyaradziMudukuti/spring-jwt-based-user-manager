@@ -4,8 +4,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import zw.co.munyasys.common.exceptions.ResourceNotFoundException;
 import zw.co.munyasys.users.dao.UserRepository;
-import zw.co.munyasys.users.dto.UserDto;
-import zw.co.munyasys.users.mapper.UserMapper;
 import zw.co.munyasys.users.model.User;
 
 import java.security.Principal;
@@ -18,11 +16,9 @@ import static java.util.Objects.nonNull;
 public class UserReaderService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
-    public UserReaderService(UserRepository userRepository, UserMapper userMapper) {
+    public UserReaderService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
     }
 
     public User findUserByUsernameOrEmail(String username, String email) {
@@ -41,7 +37,7 @@ public class UserReaderService {
                 .orElseThrow(() -> new ResourceNotFoundException("User record was not found"));
     }
 
-    public UserDto getMyAccount(Principal principal) {
+    public User getMyAccount(Principal principal) {
         String username = principal.getName();
         return userRepository.findByUsername(username)
                 .map(userMapper::toDto)

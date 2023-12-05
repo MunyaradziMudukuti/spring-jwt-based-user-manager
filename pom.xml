@@ -128,6 +128,11 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>${jjwt.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>com.credaltech</groupId>
+            <artifactId>vsla</artifactId>
+            <version>2.0.0</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<finalName>mdk-todo-app</finalName>

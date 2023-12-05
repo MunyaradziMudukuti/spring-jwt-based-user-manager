@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import zw.co.munyasys.users.dto.UserDto;
+import zw.co.munyasys.users.model.User;
 import zw.co.munyasys.users.service.create.CreateUserRequest;
 import zw.co.munyasys.users.service.create.CreateUserService;
 import zw.co.munyasys.users.service.read.UserReaderService;
@@ -35,19 +35,19 @@ public class UsersRestController {
 
     @PostMapping("/v1/users/sign-up")
     @ApiOperation("Create User Account/ Sign Up")
-    public UserDto createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
+    public User createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         return createUserService.execute(createUserRequest);
     }
 
     @PostMapping("/v1/users/my-account")
     @ApiOperation("Update My User Account")
-    public UserDto updateMyUserAccount(@RequestBody @Valid UpdateUserCommand updateUserCommand, Principal principal) {
+    public User updateMyUserAccount(@RequestBody @Valid UpdateUserCommand updateUserCommand, Principal principal) {
         return updateUserService.updateMyAccount(principal, updateUserCommand);
     }
 
     @GetMapping("/v1/users/my-account")
     @ApiOperation("Get My Account")
-    public UserDto getOneById(Principal principal) {
+    public User getOneById(Principal principal) {
         return userReaderService.getMyAccount(principal);
     }
 
