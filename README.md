@@ -1,12 +1,9 @@
-# Todo App Backend (Under Development)
+# User Management with JWT Authentication (Under Development)
 
-Todo Application with JWT Authentication 
+User Management with JWT Authentication (TO-DO :: make it maven library)
 
 ## Functionalities 
 - account creation and account management
-- add, edit and delete todos
-- add, edit and delete todo categories
-- in-app and email reminder notifications
 
 ## Technologies used
 - Java 17
